@@ -4,12 +4,20 @@ from django.urls import reverse, reverse_lazy
 from django.views import generic
 
 from django.views.generic.edit import CreateView
-
+from django.views.generic import ListView, DetailView, TemplateView
 
 from .models import Question, Choice
 
+class BaseIndexView(TemplateView):
+    template_name = "polls/startpage.html"
 
-class IndexView(generic.ListView):
+    def get_context_data(self):
+        questions = Question.objects.all()
+        choices = Choice.objects.all()
+        return {'message': 'WELCOME!!!', 'questions': questions, 'choices': choices}
+
+
+class IndexView(ListView):
     template_name = 'polls/index.html'
     context_object_name = 'latest_question_list'
 
@@ -18,12 +26,12 @@ class IndexView(generic.ListView):
         return Question.objects.order_by('-pub_date')[:5]
 
 
-class DetailView(generic.DetailView):
+class DetailView(DetailView):
     model = Question
     template_name = 'polls/detail.html'
 
 
-class ResultsView(generic.DetailView):
+class ResultsView(DetailView):
     model = Question
     template_name = 'polls/results.html'
 
