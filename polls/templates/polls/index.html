@@ -7,3 +7,6 @@
 {% else %}
     <p>No polls are available.</p>
 {% endif %}
+
+<a href="{% url 'polls:create_question' %}"><button>Create a new question</button></a>
+<a href="{% url 'polls:create_choice' %}"><button>Create a new choice</button></a>

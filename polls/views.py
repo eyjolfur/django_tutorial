@@ -1,7 +1,9 @@
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views import generic
+
+from django.views.generic.edit import CreateView
 
 
 from .models import Question, Choice
@@ -43,3 +45,13 @@ def vote(request, question_id):
         # with POST data. This prevents data from being posted twice if a
         # user hits the Back button.
         return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
+
+class QuestionCreateView(CreateView):
+    model = Question
+    fields = ['question_text', 'pub_date']
+    success_url = reverse_lazy('index')
+
+class ChoiceCreateView(CreateView):
+    model = Choice
+    fields = ['question', 'choice_text', 'votes']
+    success_url = reverse_lazy('index')
