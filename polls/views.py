@@ -14,7 +14,7 @@ class BaseIndexView(TemplateView):
     def get_context_data(self):
         questions = Question.objects.all()
         choices = Choice.objects.all()
-        return {'message': 'WELCOME!!!', 'questions': questions, 'choices': choices}
+        return {'message': 'and here we go again...', 'questions': questions, 'choices': choices}
 
 
 class IndexView(ListView):
@@ -63,3 +63,18 @@ class ChoiceCreateView(CreateView):
     model = Choice
     fields = ['question', 'choice_text', 'votes']
     success_url = reverse_lazy('index')
+
+class GraphView(TemplateView):
+    template_name = 'polls/graph.html'
+
+    def get_context_data(self):
+        labels = []
+        values = []
+
+        for q in Question.objects.all().order_by('pub_date'):
+            choices = len(q.choice_set.all())
+            labels.append(q.pub_date)
+            values.append(choices)
+
+        return {'labels': labels, 'values': values}
+
